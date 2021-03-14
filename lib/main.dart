@@ -1,4 +1,5 @@
 import 'package:file_example/db_handler/db_handler.dart';
+import 'package:file_example/file_handler/file_handler.dart';
 import 'package:file_example/models/user_model.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +28,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final DatabaseHandler db = DatabaseHandler.instance;
+  final FileHandler fileHandler = FileHandler.instance;
   List<User> userList = [];
 
   final User user1 = User(
@@ -34,6 +36,12 @@ class _MyHomePageState extends State<MyHomePage> {
     email: 'abc@example.com',
     name: 'Ram',
     phone: '1234567890',
+    userAddress: Address(
+      houseNo: '613',
+      locality: 'RNT',
+      city: 'Agartala',
+      state: 'Tripura',
+    ),
   );
 
   final User user2 = User(
@@ -41,6 +49,12 @@ class _MyHomePageState extends State<MyHomePage> {
     email: 'def@gmail.com',
     name: 'Shyam',
     phone: '9876543210',
+    userAddress: Address(
+      houseNo: '128',
+      locality: 'RNT Block-2',
+      city: 'Agartala',
+      state: 'Tripura',
+    ),
   );
 
   @override
@@ -56,7 +70,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 const Spacer(),
                 ElevatedButton(
                   onPressed: () async {
-                    final _users = await db.getUsers();
+                    // final _users = await db.getUsers();
+                    final _users = await fileHandler.readUsers();
                     setState(() {
                       userList = _users;
                     });
@@ -66,8 +81,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 const Spacer(),
                 ElevatedButton(
                   onPressed: () async {
-                    await db.insert(user1);
-                    await db.insert(user2);
+                    // await db.insert(user1);
+                    // await db.insert(user2);
+                    await fileHandler.writeUser(user1);
+                    await fileHandler.writeUser(user2);
                   },
                   child: Text('Insert Users'),
                 ),
@@ -84,20 +101,23 @@ class _MyHomePageState extends State<MyHomePage> {
                       email: user1.email,
                       name: 'Lakhan',
                       phone: user1.phone,
+                      userAddress: user1.userAddress,
                     );
 
-                    await db.update(
-                      user: _userUpdate,
-                      whereColName: colId,
-                      argument: user1.id,
-                    );
+                    // await db.update(
+                    //   user: _userUpdate,
+                    //   whereColName: colId,
+                    //   argument: user1.id,
+                    // );
+                    await fileHandler.updateUser(id: _userUpdate.id, updatedUser: _userUpdate);
                   },
                   child: Text('Update User'),
                 ),
                 const Spacer(),
                 ElevatedButton(
                   onPressed: () async {
-                    await db.delete(whereColName: colId, argument: user1.id);
+                    // await db.delete(whereColName: colId, argument: user1.id);
+                    await fileHandler.deleteUser(user1);
                   },
                   child: Text('Delete User'),
                 ),
