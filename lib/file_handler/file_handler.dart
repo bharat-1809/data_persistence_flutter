@@ -11,7 +11,7 @@ class FileHandler {
   static final FileHandler instance = FileHandler._privateConstructor();
 
   static File? _file;
-  static Set<User> _userSet = {};
+
   static final _fileName = 'user_file.txt';
 
   // Get the data file
@@ -28,6 +28,8 @@ class FileHandler {
     final _path = _directory.path;
     return File('$_path/$_fileName');
   }
+
+  static Set<User> _userSet = {};
 
   Future<void> writeUser(User user) async {
     final File fl = await file;
@@ -62,7 +64,10 @@ class FileHandler {
     await fl.writeAsString(jsonEncode(_userListMap));
   }
 
-  Future<void> updateUser({required int id, required User updatedUser}) async {
+  Future<void> updateUser({
+    required int id,
+    required User updatedUser,
+  }) async {
     _userSet.removeWhere((e) => e.id == updatedUser.id);
     await writeUser(updatedUser);
   }
