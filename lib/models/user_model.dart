@@ -15,20 +15,20 @@ class User extends Equatable {
   final String phone;
   final Address userAddress;
 
-  User.fromMap(Map<String, dynamic> map)
+  User.fromJson(Map<String, dynamic> map)
       : id = (map['id'] as num).toInt(),
         name = map['name'] as String,
         email = map['email'] as String,
         phone = map['phone'] as String,
-        userAddress = Address.fromMap(map['userAddress']);
+        userAddress = Address.fromJson(map['userAddress']);
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'id': id,
       'name': name,
       'email': email,
       'phone': phone,
-      'userAddress': userAddress.toMap(),
+      'userAddress': userAddress.toJson(),
     };
   }
 
@@ -54,13 +54,13 @@ class Address extends Equatable {
   final String city;
   final String state;
 
-  Address.fromMap(Map<String, dynamic> map)
+  Address.fromJson(Map<String, dynamic> map)
       : houseNo = map['houseNo'],
         locality = map['locality'],
         city = map['city'],
         state = map['state'];
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return {
       'houseNo': houseNo,
       'locality': locality,

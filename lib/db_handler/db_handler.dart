@@ -61,7 +61,7 @@ class DatabaseHandler {
     if (userMaps.isEmpty)
       return null;
     else
-      return User.fromMap(userMaps.first);
+      return User.fromJson(userMaps.first);
   }
 
   // Get list of all users in the database
@@ -71,7 +71,7 @@ class DatabaseHandler {
 
     return List.generate(
       userMaps.length,
-      (i) => User.fromMap(userMaps[i]),
+      (i) => User.fromJson(userMaps[i]),
     );
   }
 
@@ -80,7 +80,7 @@ class DatabaseHandler {
     final Database db = await database;
     return await db.insert(
       tableName,
-      user.toMap(),
+      user.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
@@ -90,7 +90,7 @@ class DatabaseHandler {
     final Database db = await database;
     return await db.update(
       tableName,
-      user.toMap(),
+      user.toJson(),
       where: whereColName != null ? '$whereColName = ?' : null,
       whereArgs: argument != null ? [argument] : null,
     );

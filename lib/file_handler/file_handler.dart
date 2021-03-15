@@ -11,7 +11,7 @@ class FileHandler {
   static final FileHandler instance = FileHandler._privateConstructor();
 
   static File? _file;
-  static Set<User> _users = {};
+  static Set<User> _userSet = {};
   static final _fileName = 'user_file.txt';
 
   // Get the data file
@@ -31,8 +31,11 @@ class FileHandler {
 
   Future<void> writeUser(User user) async {
     final File fl = await file;
-    _users.add(user);
-    final _userListMap = _users.map((e) => e.toMap()).toList();
+    _userSet.add(user);
+
+    // Now convert the set to a list as the jsonEncoder cannot encode
+    // a set but a list.
+    final _userListMap = _userSet.map((e) => e.toJson()).toList();
 
     await fl.writeAsString(jsonEncode(_userListMap));
   }
@@ -44,7 +47,7 @@ class FileHandler {
     final List<dynamic> _jsonData = jsonDecode(_content);
     final List<User> _users = _jsonData
         .map(
-          (e) => User.fromMap(e as Map<String, dynamic>),
+          (e) => User.fromJson(e as Map<String, dynamic>),
         )
         .toList();
     return _users;
@@ -53,14 +56,14 @@ class FileHandler {
   Future<void> deleteUser(User user) async {
     final File fl = await file;
 
-    _users.removeWhere((e) => e == user);
-    final _userListMap = _users.map((e) => e.toMap()).toList();
+    _userSet.removeWhere((e) => e == user);
+    final _userListMap = _userSet.map((e) => e.toJson()).toList();
 
     await fl.writeAsString(jsonEncode(_userListMap));
   }
 
   Future<void> updateUser({required int id, required User updatedUser}) async {
-    _users.removeWhere((e) => e.id == updatedUser.id);
+    _userSet.removeWhere((e) => e.id == updatedUser.id);
     await writeUser(updatedUser);
   }
 }
